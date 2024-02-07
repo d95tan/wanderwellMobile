@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-import {
-  View,
-  Button,
-  Text,
-  Platform,
-  TextInput,
-  StyleSheet,
-} from "react-native";
+import { View, Button, Text, TextInput, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import {createTrip} from "../utilities/trips/tripsService";
 
-export default function NewTripScreen() {
+export default function NewTripScreen({route, navigation}) {
+  const { addTrip } = route.params;
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  const handleNameChange = (text) => {
+    setName(text);
+  };
 
   const handleStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
@@ -28,6 +27,18 @@ export default function NewTripScreen() {
     setEndDate(currentDate);
   };
 
+  const handleCreateTrip = async () => {
+    const tripData = {
+      name,
+      startDate,
+      endDate,
+    };
+    const newTrip = await createTrip(tripData)
+    addTrip(newTrip);
+    console.log(newTrip);
+    navigation.navigate("Trips")
+  };
+
   const showStartDatePickerModal = () => {
     setShowStartDatePicker(true);
   };
@@ -38,16 +49,16 @@ export default function NewTripScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.dateInput} >
-      <Text>Destination</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => handleChange("name", text)}
-        value={name}
-        autoComplete="country"
-        placeholder="Sydney"
+      <View style={styles.dateInput}>
+        <Text>Destination</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={handleNameChange}
+          value={name}
+          autoComplete="country"
+          placeholder="Sydney"
         />
-        </View>
+      </View>
       <View style={styles.dateContainer}>
         <View style={styles.dateInput}>
           <Text>Start</Text>
@@ -64,6 +75,8 @@ export default function NewTripScreen() {
           />
         </View>
       </View>
+      <Button title="Create Trip" onPress={handleCreateTrip} />
+
       {showStartDatePicker && (
         <DateTimePicker
           testID="startDatePicker"
@@ -106,5 +119,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
+    paddingHorizontal: 10,
   },
 });
