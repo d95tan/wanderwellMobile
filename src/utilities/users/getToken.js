@@ -4,7 +4,8 @@ import base64 from "base-64";
 export async function getToken() {
   try {
     const token = await AsyncStorage.getItem("token");
-    console.log("Token retrieved:", token)
+    // console.log("Token retrieved:", token)
+    if (!token) return null;
     
     const payload = JSON.parse(base64.decode(token.split(".")?.[1]));
 

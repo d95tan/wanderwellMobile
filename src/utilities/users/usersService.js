@@ -10,10 +10,10 @@ export async function getUser() {
 }
 
 export async function signUp(data) {
-  const body = { email: data.email, password: data.password };
+  const body = { email: data.email, name: data.name, password: data.password };
   const token = await usersAPI.signUp(body);
   try {
-    await AsyncStorage.setItem("token", JSON.stringify(token));
+    await AsyncStorage.setItem("token", token);
   } catch (e) {
     console.log("saving failed");
     return;
@@ -26,7 +26,7 @@ export async function signUp(data) {
 export async function logIn(data) {
   const token = await usersAPI.logIn(data);
   try {
-    await AsyncStorage.setItem("token", JSON.stringify(token));
+    await AsyncStorage.setItem("token", token);
   } catch (e) {
     console.log("loginError", e);
     return null;
