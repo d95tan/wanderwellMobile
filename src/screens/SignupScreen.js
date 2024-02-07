@@ -9,6 +9,7 @@ export default function SignupScreen({ navigation, route }) {
   
   const [cred, setCred] = useState({
     email: "dan@dan.com",
+    name: "Dan",
     password: "password",
     confirm: "password",
   });
@@ -47,6 +48,14 @@ export default function SignupScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Text>Log In</Text>
+      <Text>Name</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={(text) => handleChange("name", text)}
+        value={cred.name}
+        autoComplete="name"
+        placeholder="Stanley"
+      />
       <Text>Email</Text>
       <TextInput
         style={styles.input}
@@ -85,5 +94,6 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
+    paddingHorizontal: 10,
   },
 });

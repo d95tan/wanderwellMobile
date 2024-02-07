@@ -27,7 +27,7 @@ export default function Navigation({}) {
           <Stack.Screen
             name="Trips"
             component={TripsScreen}
-            options={{ title: `Welcome back, ${user?.email}` }}
+            options={{ title: `Welcome back, ${user?.name}` }}
           />
           <Stack.Screen
             name="NewTrip"
