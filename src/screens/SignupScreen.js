@@ -2,9 +2,10 @@ import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { isValidEmail, isValidPassword } from "../utilities/validation";
 import { signUp } from "../utilities/users/usersService";
+import { useUser } from "../utilities/users/UserContext";
 
 export default function SignupScreen({ navigation, route }) {
-  const { setUser } = route.params;
+  const { setUser } = useUser();
   
   const [cred, setCred] = useState({
     email: "dan@dan.com",
@@ -20,6 +21,10 @@ export default function SignupScreen({ navigation, route }) {
     console.log("signup clicked");
     if (!isValidEmail(cred.email)) {
       Alert.alert("Invalid Email", "Please enter a valid email");
+      return;
+    }
+    if (!isValidPassword(cred.password)) {
+      Alert.alert("Invalid Password", "Please enter a valid password");
       return;
     }
     if (cred.password !== cred.confirm) {

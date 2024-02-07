@@ -2,9 +2,10 @@ import { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { isValidEmail, isValidPassword } from "../utilities/validation";
 import { logIn } from "../utilities/users/usersService";
+import { useUser } from "../utilities/users/UserContext";
 
 export default function LoginScreen({ navigation, route }) {
-  const { setUser } = route.params;
+  const {setUser}  = useUser();
 
   const [cred, setCred] = useState({
     email: "dan@dan.com",
