@@ -1,27 +1,12 @@
 import * as usersAPI from "./usersAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import base64 from "base-64";
+import { getToken } from "./getToken";
 
 export async function getUser() {
   const token = await getToken();
   const user = JSON.parse(base64.decode(token.split(".")[1])).user;
   return token ? user : null;
-}
-
-export async function getToken() {
-  try {
-    const token = await AsyncStorage.getItem("token");
-    const payload = JSON.parse(base64.decode(token.split(".")[1]));
-    if (payload.exp < Date.now() / 1000) {
-      console.log("expired");
-      await AsyncStorage.removeItem("token");
-      return null;
-    }
-    return token;
-  } catch (e) {
-    console.log("error retrieving token", e);
-    return null;
-  }
 }
 
 export async function signUp(data) {

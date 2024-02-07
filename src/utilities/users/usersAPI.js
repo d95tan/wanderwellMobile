@@ -1,45 +1,32 @@
 import { API_BASE_URL } from "../../../config.js";
-import { getToken } from "./usersService.js";
+import { getToken } from "./getToken.js";
 
 const baseURL = API_BASE_URL+"/users"
 
-const token = getToken();
+export async function sendRequest(url, method = 'GET', payload = null) {
+  const options = { method };
+  if (payload) {
+    options.headers = { "Content-Type": "application/json" };
+    options.body = JSON.stringify(payload);
+  }
 
-const headers = {
-  "Content-type": "application/json",
-  "Authorization": `Bearer ${token}`
+  const token = getToken();
+
+  if (token) {
+    options.headers ||= {};
+    options.headers.Authorization = `Bearer ${token}`;
+  }
+
+  const res = await fetch(url, options);
+
+  if (res.ok) return res.json();
+  throw new Error("Bad Request");
 }
 
 export async function signUp(body) {
-  const options = {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-  }
-
-  const res = await fetch(baseURL, options)
-
-  if (!res.ok) {
-    throw new Error("Bad request");
-  }
-
-  const json = await res.json();
-  return json;
+  return sendRequest(baseURL, "POST", body)
 }
 
 export async function logIn(body) {
-  const options = {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-  }
-
-  const res = await fetch(baseURL + "/login", options)
-  
-  if (!res.ok) {
-    throw new Error("Bad request")
-  }
-
-  const json = await res.json();
-  return json;
+  return sendRequest(baseURL + "/login", "POST", body)
 }
