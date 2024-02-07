@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Text, View, Button } from "react-native";
 import { logOut } from '../utilities/users/usersService';
 
-export default function PlanningScreen({navigation}) {
+export default function PlanningScreen({ navigation, route }) {
+  const { tripId } = route.params;
   const [count, setCount] = useState(0);
 
   const handleClick = () => {
@@ -13,6 +14,7 @@ export default function PlanningScreen({navigation}) {
   return (
     <View>
       <Text>Trips Screen!</Text>
+      <Text>Trip id = {tripId}</Text>
       <Text>Counter = {count}</Text>
       <Button title="button1" onPress={handleClick} />
       <Button title="logout" onPress={() => {

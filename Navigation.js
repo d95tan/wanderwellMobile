@@ -17,7 +17,11 @@ export default function Navigation({}) {
   const { user, setUser, loading } = useUser();
 
   if (loading) {
-    return <View><Text>Loading</Text></View>
+    return (
+      <View>
+        <Text>Loading</Text>
+      </View>
+    );
   }
 
   return (
@@ -54,27 +58,30 @@ export default function Navigation({}) {
       </NavigationContainer>
     </UserProvider>
   );
-};
+}
 
-const SingleTripNavigator = () => {
+const SingleTripNavigator = ({ route }) => {
+  const { tripId } = route.params;
   return (
     <Tab.Navigator initialRouteName="Planning">
       <Tab.Screen
         name="Planning"
         component={PlanningScreen}
         options={{ headerShown: false }}
+        initialParams={{ tripId }}
       />
       <Tab.Screen
         name="Expenses"
         component={PlanningScreen}
         options={{ headerShown: false }}
+        initialParams={{ tripId }}
       />
       <Tab.Screen
         name="Whatever"
         component={PlanningScreen}
         options={{ headerShown: false }}
+        initialParams={{ tripId }}
       />
     </Tab.Navigator>
   );
 };
-
