@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { View, Button, Text, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React, { useState } from "react";
+import {
+  View,
+  Button,
+  Text,
+  Platform,
+  TextInput,
+  StyleSheet,
+} from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-export default function NewTripScreen ()  {
+export default function NewTripScreen() {
+  const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
@@ -10,13 +18,13 @@ export default function NewTripScreen ()  {
 
   const handleStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
-    setShowStartDatePicker(Platform.OS === 'ios');
+    setShowStartDatePicker(false);
     setStartDate(currentDate);
   };
 
   const handleEndDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || endDate;
-    setShowEndDatePicker(Platform.OS === 'ios');
+    setShowEndDatePicker(false);
     setEndDate(currentDate);
   };
 
@@ -29,11 +37,33 @@ export default function NewTripScreen ()  {
   };
 
   return (
-    <View>
-      <Button title="Select Start Date" onPress={showStartDatePickerModal} />
-      <Text>Start Date: {startDate.toDateString()}</Text>
-      <Button title="Select End Date" onPress={showEndDatePickerModal} />
-      <Text>End Date: {endDate.toDateString()}</Text>
+    <View style={styles.container}>
+      <View style={styles.dateInput} >
+      <Text>Destination</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={(text) => handleChange("name", text)}
+        value={name}
+        autoComplete="country"
+        placeholder="Sydney"
+        />
+        </View>
+      <View style={styles.dateContainer}>
+        <View style={styles.dateInput}>
+          <Text>Start</Text>
+          <Button
+            title={startDate.toDateString()}
+            onPress={showStartDatePickerModal}
+          />
+        </View>
+        <View style={styles.dateInput}>
+          <Text>End</Text>
+          <Button
+            title={endDate.toDateString()}
+            onPress={showEndDatePickerModal}
+          />
+        </View>
+      </View>
       {showStartDatePicker && (
         <DateTimePicker
           testID="startDatePicker"
@@ -56,5 +86,25 @@ export default function NewTripScreen ()  {
       )}
     </View>
   );
-};
+}
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginHorizontal: "7.5%",
+    justifyContent: "center",
+    gap: 16,
+  },
+  dateContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: 45,
+  },
+  dateInput: {
+    flexDirection: "column",
+    gap: 3,
+  },
+  input: {
+    borderWidth: 1,
+  },
+});
