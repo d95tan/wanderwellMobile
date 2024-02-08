@@ -70,7 +70,6 @@ export default function Navigation({}) {
 }
 
 const SingleTripNavigator = ({ route,navigation }) => {
-  const { tripId } = route.params;
   const { tripData } = useTrip();
   
   useLayoutEffect(() => {
@@ -83,19 +82,16 @@ const SingleTripNavigator = ({ route,navigation }) => {
         name="Planning"
         component={PlanningScreen}
         options={{ headerShown: false }}
-        initialParams={{ tripId }}
       />
       <Tab.Screen
         name="Expenses"
         component={PlanningScreen}
         options={{ headerShown: false }}
-        initialParams={{ tripId }}
       />
       <Tab.Screen
         name="Whatever"
         component={PlanningScreen}
         options={{ headerShown: false }}
-        initialParams={{ tripId }}
       />
     </Tab.Navigator>
   );
