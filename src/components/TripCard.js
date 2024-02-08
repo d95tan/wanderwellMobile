@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function TripCard({ trip, navigation }) {
+export default function TripCard({ trip, navigation, setTripData }) {
   const { id, name, startdate, enddate } = trip;
 
   const handlePress = () => {
-    console.log("presspress");
-    navigation.navigate("SingleTrip", { tripId: id });
+    setTripData(trip)
+    navigation.navigate("SingleTrip");
   };
 
   return (

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useUser } from "../utilities/users/UserContext";
+import { useUser } from "../hooks/useUser";
 import { useEffect, useState } from "react";
 import { Text, View, Button, StyleSheet } from "react-native";
 import { isPast } from "date-fns";
@@ -7,9 +7,11 @@ import { logOut } from "../utilities/users/usersService";
 import { getTrips } from "../utilities/trips/tripsService";
 import TripCard from "../components/TripCard";
 import NewTripCard from "../components/NewTripCard";
+import { useTrip } from "../hooks/useTrip";
 
 export default function TripsScreen({ navigation }) {
   const [trips, setTrips] = useState([]);
+  const { setTripData } = useTrip();
   const { user } = useUser();
 
   useEffect(() => {
@@ -17,7 +19,7 @@ export default function TripsScreen({ navigation }) {
       try {
         const fetchedTrips = await getTrips();
         setTrips(fetchedTrips);
-        console.log(fetchedTrips);
+        // console.log(fetchedTrips);
       } catch (error) {
         console.log("Error fetching trips:", error);
       }
@@ -44,7 +46,7 @@ export default function TripsScreen({ navigation }) {
         {trips
           .filter((trip) => !isPast(trip.enddate))
           .map((trip) => (
-            <TripCard key={trip.id} trip={trip} navigation={navigation} />
+            <TripCard key={trip.id} trip={trip} navigation={navigation} setTripData={setTripData} />
           ))}
         <NewTripCard navigation={navigation} addTrip={addTrip} />
       </View>
@@ -56,7 +58,7 @@ export default function TripsScreen({ navigation }) {
             {trips
               .filter((trip) => isPast(trip.enddate))
               .map((trip) => (
-                <TripCard key={trip.id} trip={trip} navigation={navigation} />
+                <TripCard key={trip.id} trip={trip} navigation={navigation} setTripData={setTripData} />
               ))}
           </View>
         </>

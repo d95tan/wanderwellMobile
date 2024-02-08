@@ -2,11 +2,15 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from "react";
 import { Text, View, Button } from "react-native";
 import { logOut } from '../utilities/users/usersService';
+import { useTrip } from '../hooks/useTrip';
 
 export default function PlanningScreen({ navigation, route }) {
-  const { tripId } = route.params;
   const [count, setCount] = useState(0);
+  const { tripData, setTripData } = useTrip();
+  console.log("received tripData:", tripData)
+  
 
+  
   const handleClick = () => {
     setCount(count + 1);
   };
@@ -14,7 +18,8 @@ export default function PlanningScreen({ navigation, route }) {
   return (
     <View>
       <Text>Trips Screen!</Text>
-      <Text>Trip id = {tripId}</Text>
+      <Text>Trip id = {tripData.id}</Text>
+      <Text>Trip name = {tripData.name}</Text>
       <Text>Counter = {count}</Text>
       <Button title="button1" onPress={handleClick} />
       <Button title="logout" onPress={() => {
