@@ -8,5 +8,9 @@ export async function createEvent(body, tripId) {
 }
 
 export async function getEvents(tripId) {
-  return sendRequest(baseURL + `/${tripId}`, "GET")
+  return sendRequest(baseURL + `/${tripId}`, "GET");
+}
+
+export async function deleteEvent(eventId, tripId) {
+  return sendRequest(baseURL + `/${tripId}/${eventId}`, "DELETE");
 }

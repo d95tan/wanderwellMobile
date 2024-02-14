@@ -4,19 +4,26 @@ import { eachDayOfInterval } from "date-fns";
 import { SLOT_HEIGHT } from "../../styles/PlanningStyles";
 import { cloneDeep } from "lodash";
 
-export async function createEvent(data, tripId) {
+export async function createEvent(data, tripId, calendar) {
   const newEvent = await eventsAPI.createEvent(data, tripId);
-  return newEvent;
-}
-
-export function insertNewEvent(newEvent, calendar) {
-  const newCalendar = cloneDeep(calendar)
+  const newCalendar = cloneDeep(calendar);
   for (const day of newCalendar) {
     if (isSameDay(newEvent.start, day.date)) {
       day.events.push(newEvent);
       return newCalendar;
     }
   }
+  return calendar;
+}
+
+export async function deleteEvent(eventId, tripId, calendar) {
+  const deletedEvent = await eventsAPI.deleteEvent(eventId, tripId);
+  const newCalendar = cloneDeep(calendar);
+  for (const day of newCalendar) {
+    const events = day.events.filter((event) => event.id !== deletedEvent.id);
+    day.events = events;
+  }
+  return newCalendar;
 }
 
 export async function getEvents(tripId) {

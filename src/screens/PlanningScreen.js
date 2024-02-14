@@ -5,6 +5,7 @@ import { logOut } from "../utilities/users/usersService";
 import { useTrip } from "../hooks/useTrip";
 import {
   createEvent,
+  deleteEvent,
   getEvents,
   insertNewEvent,
   mapEventsToDay,
@@ -28,6 +29,7 @@ export default function PlanningScreen({ navigation }) {
     start: new Date(),
     end: new Date(),
   });
+
   const [editEvent, setEditEvent] = useState({
     id: undefined,
     tripid: undefined,
@@ -36,8 +38,7 @@ export default function PlanningScreen({ navigation }) {
     description: "",
     start: new Date(),
     end: new Date(),
-  })
-  
+  });
 
   useEffect(() => {
     (async () => {
@@ -54,8 +55,7 @@ export default function PlanningScreen({ navigation }) {
 
   handleCreateNewEvent = async () => {
     try {
-      const createdEvent = await createEvent(newEvent, tripData.id);
-      const newCalendar = insertNewEvent(createdEvent, calendar);
+      const newCalendar = await createEvent(newEvent, tripData.id, calendar);
       setCalendar(newCalendar);
       setNewEvent({
         name: "",
@@ -70,8 +70,18 @@ export default function PlanningScreen({ navigation }) {
   };
 
   handleEditEvent = async () => {
-    console.log("handleEditEvent")
-  }
+    console.log("handleEditEvent", editEvent);
+  };
+
+  handleDeleteEvent = async () => {
+    console.log("delete event: ", editEvent);
+    try {
+      const newCalendar = await deleteEvent(editEvent.id, tripData.id, calendar);
+      setCalendar(newCalendar);
+    } catch (error) {
+      console.log("Error deleting event", error);
+    }
+  };
 
   return (
     <View style={styles.planningScreen}>
@@ -110,6 +120,7 @@ export default function PlanningScreen({ navigation }) {
         editEvent={editEvent}
         setEditEvent={setEditEvent}
         handleEditEvent={handleEditEvent}
+        handleDeleteEvent={handleDeleteEvent}
       />
     </View>
   );
