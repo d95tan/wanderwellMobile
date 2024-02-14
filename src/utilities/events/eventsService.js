@@ -16,6 +16,19 @@ export async function createEvent(data, tripId, calendar) {
   return calendar;
 }
 
+export async function updateEvent(event, tripId, calendar) {
+  const updatedEvent = await eventsAPI.updateEvent(event, tripId);
+  const newCalendar = cloneDeep(calendar);
+  for (const day of newCalendar) {
+    for (let i = 0; i < day.events.length; i++) {
+      if (day.events[i].id === updatedEvent.id) {
+        day.events[i] = updatedEvent;
+        return newCalendar;
+      }
+    }
+  }
+}
+
 export async function deleteEvent(eventId, tripId, calendar) {
   const deletedEvent = await eventsAPI.deleteEvent(eventId, tripId);
   const newCalendar = cloneDeep(calendar);

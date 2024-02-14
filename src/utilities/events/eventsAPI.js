@@ -14,3 +14,8 @@ export async function getEvents(tripId) {
 export async function deleteEvent(eventId, tripId) {
   return sendRequest(baseURL + `/${tripId}/${eventId}`, "DELETE");
 }
+
+export async function updateEvent(body, tripId) {
+  const eventId = body.id;
+  return sendRequest(baseURL + `/${tripId}/${eventId}`, "PUT", body);
+}

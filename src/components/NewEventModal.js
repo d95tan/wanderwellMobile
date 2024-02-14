@@ -1,7 +1,15 @@
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { Text, Button, Modal, StyleSheet, View, TextInput } from "react-native";
+import {
+  Alert,
+  Text,
+  Button,
+  Modal,
+  StyleSheet,
+  View,
+  TextInput,
+} from "react-native";
 import { format } from "date-fns";
 
 export default function NewEventModal({
@@ -9,27 +17,66 @@ export default function NewEventModal({
   setNewEventModalVisible,
   newEvent,
   setNewEvent,
-  handleCreateNewEvent
+  handleCreateNewEvent,
 }) {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [isUnsaved, setIsUnsaved] = useState(false);
 
   const handleClose = () => {
-    setNewEventModalVisible(false);
+    if (isUnsaved) {
+      Alert.alert(
+        "Discard Changes",
+        "Are you sure you want to navigate away?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              setNewEventModalVisible(false);
+              setIsUnsaved(false);
+              setNewEvent({
+                name: "",
+                type: "activity",
+                description: "",
+                start: new Date(),
+                end: new Date(),
+              });
+            },
+          },
+        ]
+      );
+    } else {
+      setNewEventModalVisible(false);
+      setNewEvent({
+        name: "",
+        type: "activity",
+        description: "",
+        start: new Date(),
+        end: new Date(),
+      });
+    }
   };
 
   const handleSave = () => {
     setNewEventModalVisible(false);
-    handleCreateNewEvent()
+    setIsUnsaved(false);
+    handleCreateNewEvent();
   };
 
   const handleChange = (name, text) => {
+    setIsUnsaved(true);
     setNewEvent({ ...newEvent, [name]: text });
   };
 
   const handleStartDateChange = (event, selectedDate) => {
+    setIsUnsaved(true);
     const start = newEvent.start;
     start.setFullYear(selectedDate.getFullYear());
     start.setMonth(selectedDate.getMonth());
@@ -39,6 +86,7 @@ export default function NewEventModal({
   };
 
   const handleEndDateChange = (event, selectedDate) => {
+    setIsUnsaved(true);
     const end = newEvent.end;
     end.setFullYear(selectedDate.getFullYear());
     end.setMonth(selectedDate.getMonth());
@@ -48,6 +96,7 @@ export default function NewEventModal({
   };
 
   const handleStartTimeChange = (event, selectedTime) => {
+    setIsUnsaved(true);
     const start = newEvent.start;
     start.setHours(selectedTime.getHours());
     start.setMinutes(selectedTime.getMinutes());
@@ -56,6 +105,7 @@ export default function NewEventModal({
   };
 
   const handleEndTimeChange = (event, selectedTime) => {
+    setIsUnsaved(true);
     const end = newEvent.end;
     end.setHours(selectedTime.getHours());
     end.setMinutes(selectedTime.getMinutes());
@@ -89,6 +139,7 @@ export default function NewEventModal({
           <Picker
             selectedValue={newEvent.type}
             onValueChange={(itemValue) => handleChange("type", itemValue)}
+            style={styles.picker}
           >
             <Picker.Item label="Activity" value="activity" />
             <Picker.Item label="Flight" value="flight" />
@@ -178,7 +229,7 @@ export default function NewEventModal({
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     marginHorizontal: "7.5%",
@@ -187,6 +238,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 5,
   },
   dateContainer: {
     flexDirection: "row",
@@ -198,4 +251,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
   },
+  picker: {
+    backgroundColor: "whitesmoke",
+    width: "50%"
+  },  
 });

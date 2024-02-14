@@ -1,8 +1,17 @@
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { Text, Button, Modal, StyleSheet, View, TextInput } from "react-native";
+import {
+  Text,
+  Button,
+  Modal,
+  StyleSheet,
+  View,
+  TextInput,
+  Alert,
+} from "react-native";
 import { format } from "date-fns";
+import { styles } from "./NewEventModal";
 
 export default function EditEventModal({
   editEventModalVisible,
@@ -16,26 +25,60 @@ export default function EditEventModal({
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [isUnsaved, setIsUnsaved] = useState(false)
 
   const handleClose = () => {
-    setEditEventModalVisible(false);
+    if (isUnsaved) {
+      Alert.alert("Discard Changes", "Are you sure you want to navigate away?", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            setEditEventModalVisible(false);
+            setIsUnsaved(false);
+          },
+        },
+      ]);
+    } else {
+      setEditEventModalVisible(false);
+    }
   };
 
   const handleSave = () => {
     setEditEventModalVisible(false);
-    handleEditEvent()
+    setIsUnsaved(false);
+    handleEditEvent();
   };
 
   const handleDelete = () => {
-    setEditEventModalVisible(false);
-    handleDeleteEvent();
-  }
+    Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          setEditEventModalVisible(false);
+          setIsUnsaved(false);
+          handleDeleteEvent();
+        },
+      },
+    ]);
+  };
 
   const handleChange = (name, text) => {
+    setIsUnsaved(true);
     setEditEvent({ ...editEvent, [name]: text });
   };
 
   const handleStartDateChange = (event, selectedDate) => {
+    setIsUnsaved(true);
     const start = editEvent.start;
     start.setFullYear(selectedDate.getFullYear());
     start.setMonth(selectedDate.getMonth());
@@ -45,6 +88,7 @@ export default function EditEventModal({
   };
 
   const handleEndDateChange = (event, selectedDate) => {
+    setIsUnsaved(true);
     const end = editEvent.end;
     end.setFullYear(selectedDate.getFullYear());
     end.setMonth(selectedDate.getMonth());
@@ -54,6 +98,7 @@ export default function EditEventModal({
   };
 
   const handleStartTimeChange = (event, selectedTime) => {
+    setIsUnsaved(true);
     const start = editEvent.start;
     start.setHours(selectedTime.getHours());
     start.setMinutes(selectedTime.getMinutes());
@@ -62,6 +107,7 @@ export default function EditEventModal({
   };
 
   const handleEndTimeChange = (event, selectedTime) => {
+    setIsUnsaved(true);
     const end = editEvent.end;
     end.setHours(selectedTime.getHours());
     end.setMinutes(selectedTime.getMinutes());
@@ -95,6 +141,7 @@ export default function EditEventModal({
           <Picker
             selectedValue={editEvent.type}
             onValueChange={(itemValue) => handleChange("type", itemValue)}
+            style={styles.picker}
           >
             <Picker.Item label="Activity" value="activity" />
             <Picker.Item label="Flight" value="flight" />
@@ -184,25 +231,3 @@ export default function EditEventModal({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    marginHorizontal: "7.5%",
-    justifyContent: "center",
-    gap: 16,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-  },
-  dateContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: 45,
-  },
-  inputContainer: { flexDirection: "column", gap: 3 },
-  input: {
-    borderWidth: 1,
-    paddingHorizontal: 10,
-  },
-});

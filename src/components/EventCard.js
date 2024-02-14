@@ -22,9 +22,12 @@ export default function EventCard({
       top,
       height,
       margin: 0,
+      paddingVertical: 0,
+      paddingHorizontal: 3,
       borderWidth: 1,
+      borderRadius: 3,
       backgroundColor: backgroundColors[event.type],
-      width: "98%",
+      width: "97%",
     },
   });
 

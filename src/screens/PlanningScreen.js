@@ -1,14 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Text, View, Button, ScrollView, Modal } from "react-native";
+import { Text, View, Button, ScrollView, Modal, Alert } from "react-native";
 import { logOut } from "../utilities/users/usersService";
 import { useTrip } from "../hooks/useTrip";
 import {
   createEvent,
   deleteEvent,
   getEvents,
-  insertNewEvent,
   mapEventsToDay,
+  updateEvent,
 } from "../utilities/events/eventsService";
 import { styles } from "../styles/PlanningStyles";
 import CalendarDay from "../components/CalendarDay";
@@ -48,6 +48,7 @@ export default function PlanningScreen({ navigation }) {
         console.log(data);
         setCalendar(data);
       } catch (error) {
+        Alert.alert("Something went wrong", "Please try again later");
         console.log("Error fetching events:", error);
       }
     })();
@@ -65,29 +66,39 @@ export default function PlanningScreen({ navigation }) {
         end: new Date(),
       });
     } catch (error) {
+      Alert.alert("Something went wrong", "Please try again later");
       console.log("Error Creating events", error);
     }
   };
 
   handleEditEvent = async () => {
     console.log("handleEditEvent", editEvent);
+    try {
+      const newCalendar = await updateEvent(editEvent, tripData.id, calendar)
+      setCalendar(newCalendar)
+    } catch (error) {
+      Alert.alert("Something went wrong", "Please try again later");
+      console.log("Error deleting event", error);
+    }
   };
 
   handleDeleteEvent = async () => {
     console.log("delete event: ", editEvent);
     try {
-      const newCalendar = await deleteEvent(editEvent.id, tripData.id, calendar);
+      const newCalendar = await deleteEvent(
+        editEvent.id,
+        tripData.id,
+        calendar
+      );
       setCalendar(newCalendar);
     } catch (error) {
+      Alert.alert("Something went wrong", "Please try again later");
       console.log("Error deleting event", error);
     }
   };
 
   return (
     <View style={styles.planningScreen}>
-      <Text>Trips Screen!</Text>
-      <Text>Trip id = {tripData.id}</Text>
-      <Text>Trip name = {tripData.name}</Text>
       <View style={styles.planningContainer}>
         <CalendarTimeBar />
         <ScrollView horizontal style={styles.calendarContainer}>

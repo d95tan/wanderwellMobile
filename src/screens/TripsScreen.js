@@ -21,6 +21,7 @@ export default function TripsScreen({ navigation }) {
         setTrips(fetchedTrips);
         // console.log(fetchedTrips);
       } catch (error) {
+        Alert.alert("Something went wrong", "Please try again later");
         console.log("Error fetching trips:", error);
       }
     })();

@@ -6,7 +6,8 @@ const calendarDayContainerWidth = 120
 
 export const styles = StyleSheet.create({
   planningScreen: {
-    marginHorizontal: "2%"
+    marginHorizontal: "2%",
+    marginTop: "5%"
   },
   planningContainer: {
     flexDirection: "row",
