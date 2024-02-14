@@ -3,24 +3,41 @@ import { useEffect, useState } from "react";
 import { Text, View, Button, ScrollView, Modal } from "react-native";
 import { logOut } from "../utilities/users/usersService";
 import { useTrip } from "../hooks/useTrip";
-import { getEvents, mapEventsToDay } from "../utilities/events/eventsService";
+import {
+  createEvent,
+  getEvents,
+  insertNewEvent,
+  mapEventsToDay,
+} from "../utilities/events/eventsService";
 import { styles } from "../styles/PlanningStyles";
 import CalendarDay from "../components/CalendarDay";
 import CalendarTimeBar from "../components/CalendarTimeBar";
 import NewEventModal from "../components/NewEventModal";
+import EditEventModal from "../components/EditEventModal";
 
 export default function PlanningScreen({ navigation }) {
   const { tripData, setTripData } = useTrip();
+  console.log("Trip Data:", tripData);
   const [newEventModalVisible, setNewEventModalVisible] = useState(false);
+  const [editEventModalVisible, setEditEventModalVisible] = useState(false);
   const [calendar, setCalendar] = useState([]);
   const [newEvent, setNewEvent] = useState({
     name: "",
     type: "activity",
     description: "",
-    start: null,
-    end: null,
+    start: new Date(),
+    end: new Date(),
   });
-  console.log("received tripData:", tripData);
+  const [editEvent, setEditEvent] = useState({
+    id: undefined,
+    tripid: undefined,
+    name: "",
+    type: "activity",
+    description: "",
+    start: new Date(),
+    end: new Date(),
+  })
+  
 
   useEffect(() => {
     (async () => {
@@ -34,6 +51,27 @@ export default function PlanningScreen({ navigation }) {
       }
     })();
   }, [tripData.id]);
+
+  handleCreateNewEvent = async () => {
+    try {
+      const createdEvent = await createEvent(newEvent, tripData.id);
+      const newCalendar = insertNewEvent(createdEvent, calendar);
+      setCalendar(newCalendar);
+      setNewEvent({
+        name: "",
+        type: "activity",
+        description: "",
+        start: new Date(),
+        end: new Date(),
+      });
+    } catch (error) {
+      console.log("Error Creating events", error);
+    }
+  };
+
+  handleEditEvent = async () => {
+    console.log("handleEditEvent")
+  }
 
   return (
     <View style={styles.planningScreen}>
@@ -51,6 +89,8 @@ export default function PlanningScreen({ navigation }) {
                 setNewEventModalVisible={setNewEventModalVisible}
                 newEvent={newEvent}
                 setNewEvent={setNewEvent}
+                setEditEventModalVisible={setEditEventModalVisible}
+                setEditEvent={setEditEvent}
               />
             );
           })}
@@ -62,6 +102,14 @@ export default function PlanningScreen({ navigation }) {
         setNewEventModalVisible={setNewEventModalVisible}
         newEvent={newEvent}
         setNewEvent={setNewEvent}
+        handleCreateNewEvent={handleCreateNewEvent}
+      />
+      <EditEventModal
+        editEventModalVisible={editEventModalVisible}
+        setEditEventModalVisible={setEditEventModalVisible}
+        editEvent={editEvent}
+        setEditEvent={setEditEvent}
+        handleEditEvent={handleEditEvent}
       />
     </View>
   );
