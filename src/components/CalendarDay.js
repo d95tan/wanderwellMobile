@@ -1,18 +1,36 @@
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { styles } from "../styles/PlanningStyles";
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import EventCard from "./EventCard";
+import { yCoordToTime } from "../utilities/events/eventsService";
 
-export default function CalendarDay({day}) {
+export default function CalendarDay({
+  day,
+  setNewEventModalVisible,
+  newEvent,
+  setNewEvent,
+}) {
   const { date, events } = day;
 
+  const handlePress = ({ nativeEvent }) => {
+    console.log(nativeEvent.locationY);
+    const yCoord = nativeEvent.locationY;
+    const newDate = yCoordToTime(yCoord, date);
+    console.log(newDate);
+    setNewEvent({
+      ...newEvent,
+      ["start"]: newDate,
+      ["end"]: addHours(newDate, 1)})
+    setNewEventModalVisible(true);
+  };
+
   return (
-    <View style={styles.calendarDayContainer}>
+    <Pressable style={styles.calendarDayContainer} onPress={handlePress}>
       <Text style={styles.timeWord}>{format(date, "eee, do MMM yy")}</Text>
       <Text style={styles.weatherTimebar}>placeholder</Text>
-      {events.map(event => {
-        return <EventCard key={event.id} event={event} />
+      {events.map((event) => {
+        return <EventCard key={event.id} event={event} />;
       })}
-    </View>
-  )
+    </Pressable>
+  );
 }

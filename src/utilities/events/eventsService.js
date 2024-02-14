@@ -43,3 +43,29 @@ export function calculatePosition(event) {
   // console.log(top);
   return {top, height};
 }
+
+export function yCoordToTime(y, date) {
+  if (y < (SLOT_HEIGHT * 2)) {
+    return false;
+  }
+  const timeDecimal = (y - (SLOT_HEIGHT * 2)) / SLOT_HEIGHT
+  let hour = Math.floor(timeDecimal)
+  const decimal = timeDecimal % 1
+
+  let minute = Math.round(decimal * 60)
+
+  if (minute >= 15 && minute < 45) {
+    minute = 30;
+  } else { 
+    if (minute >= 45) {
+      hour++;
+    }
+    minute = 0;
+  }
+
+  const newDate = new Date(date);
+  newDate.setHours(hour)
+  newDate.setMinutes(minute)
+
+  return newDate;
+}

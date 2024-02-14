@@ -1,18 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Text, View, Button, ScrollView } from "react-native";
+import { Text, View, Button, ScrollView, Modal } from "react-native";
 import { logOut } from "../utilities/users/usersService";
 import { useTrip } from "../hooks/useTrip";
 import { getEvents, mapEventsToDay } from "../utilities/events/eventsService";
 import { styles } from "../styles/PlanningStyles";
 import CalendarDay from "../components/CalendarDay";
 import CalendarTimeBar from "../components/CalendarTimeBar";
+import NewEventModal from "../components/NewEventModal";
 
 export default function PlanningScreen({ navigation }) {
   const { tripData, setTripData } = useTrip();
-  console.log("received tripData:", tripData);
-
+  const [newEventModalVisible, setNewEventModalVisible] = useState(false);
   const [calendar, setCalendar] = useState([]);
+  const [newEvent, setNewEvent] = useState({
+    name: "",
+    type: "activity",
+    description: "",
+    start: null,
+    end: null,
+  });
+  console.log("received tripData:", tripData);
 
   useEffect(() => {
     (async () => {
@@ -36,11 +44,25 @@ export default function PlanningScreen({ navigation }) {
         <CalendarTimeBar />
         <ScrollView horizontal style={styles.calendarContainer}>
           {calendar.map((day, i) => {
-            return <CalendarDay key={i} day={day} />;
+            return (
+              <CalendarDay
+                key={i}
+                day={day}
+                setNewEventModalVisible={setNewEventModalVisible}
+                newEvent={newEvent}
+                setNewEvent={setNewEvent}
+              />
+            );
           })}
         </ScrollView>
       </View>
       <StatusBar style="auto" />
+      <NewEventModal
+        newEventModalVisible={newEventModalVisible}
+        setNewEventModalVisible={setNewEventModalVisible}
+        newEvent={newEvent}
+        setNewEvent={setNewEvent}
+      />
     </View>
   );
 }

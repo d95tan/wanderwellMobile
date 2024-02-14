@@ -5,8 +5,7 @@ import { getToken } from "./getToken";
 
 export async function getUser() {
   const token = await getToken();
-  const user = JSON.parse(base64.decode(token.split(".")[1])).user;
-  return token ? user : null;
+  return token ? JSON.parse(base64.decode(token.split(".")[1])).user : null;
 }
 
 export async function signUp(data) {
