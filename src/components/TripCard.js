@@ -1,4 +1,4 @@
-import { isPast } from "date-fns";
+import { format, isPast } from "date-fns";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 export default function TripCard({ trip, navigation, setTripData }) {
@@ -21,7 +21,7 @@ export default function TripCard({ trip, navigation, setTripData }) {
     <Pressable style={{...styles.pressable, backgroundColor}} onPressOut={handlePress}>
       <Text style={styles.title}>{name}</Text>
       <Text style={styles.body}>
-        {startdate} to {enddate}
+        {format(startdate,"d MMM yy")} to {format(enddate,"d MMM yy")}
       </Text>
     </Pressable>
   );
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
     backgroundColor: "steelblue",
-    maxWidth: "50%",
+    width: "49%",
     marginVertical: "1%",
     padding: "2.5%",
     alignItems: "center",

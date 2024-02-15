@@ -12,7 +12,7 @@ export default function CalendarDay({
   setEditEventModalVisible,
   setEditEvent,
 }) {
-  const { date, events } = day;
+  const { date, events, weather } = day;
 
   const handlePress = ({ nativeEvent }) => {
     const yCoord = nativeEvent.locationY;
@@ -33,7 +33,12 @@ export default function CalendarDay({
       name={"pressable"}
     >
       <Text style={styles.timeWord}>{format(date, "eee, do MMM yy")}</Text>
-      <Text style={styles.weatherTimebar}>placeholder</Text>
+      <Text style={styles.weatherTimebar}>
+        {weather &&
+          `H: ${weather.high}, L:${weather.low} ${
+            weather?.weatherString || ""
+          }`}
+      </Text>
       {events.map((event) => {
         return (
           <EventCard

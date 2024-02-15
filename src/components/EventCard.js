@@ -9,6 +9,7 @@ export default function EventCard({
   setEditEvent,
 }) {
   const { top, height } = calculatePosition(event);
+  
 
   const backgroundColors = {
     flight: "palegreen",

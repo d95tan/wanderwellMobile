@@ -44,8 +44,8 @@ export default function PlanningScreen({ navigation }) {
     (async () => {
       try {
         const fetchedEvents = await getEvents(tripData.id);
-        const data = mapEventsToDay(tripData, fetchedEvents);
-        console.log(data);
+        const data = await mapEventsToDay(tripData, fetchedEvents);
+        // console.log(data);
         setCalendar(data);
       } catch (error) {
         Alert.alert("Something went wrong", "Please try again later");
