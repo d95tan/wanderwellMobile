@@ -11,6 +11,7 @@ import NewTripScreen from "./src/screens/NewTripScreen";
 import { Text, View } from "react-native";
 import { TripProvider, useTrip } from "./src/hooks/useTrip";
 import { useLayoutEffect } from "react";
+import TripInformationScreen from "./src/screens/TripInformationScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,7 +80,7 @@ const SingleTripNavigator = ({ route,navigation }) => {
   return (
     <Tab.Navigator initialRouteName="Planning">
       <Tab.Screen
-        name="Planning"
+        name="Calendar"
         component={PlanningScreen}
         options={{ headerShown: false }}
       />
@@ -89,8 +90,8 @@ const SingleTripNavigator = ({ route,navigation }) => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Whatever"
-        component={PlanningScreen}
+        name="Information"
+        component={TripInformationScreen}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

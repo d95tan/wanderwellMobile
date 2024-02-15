@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Button, Text, TextInput, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {createTrip} from "../utilities/trips/tripsService";
@@ -101,7 +101,7 @@ export default function NewTripScreen({route, navigation}) {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: "7.5%",

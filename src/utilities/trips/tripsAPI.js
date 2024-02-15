@@ -10,3 +10,16 @@ export async function createTrip(body) {
 export async function getTrips() {
   return sendRequest(baseURL, "GET")
 }
+
+export async function addCollaborator(body, tripId) {
+  console.log("tripsAPI", body)
+  return sendRequest(baseURL+ `/${tripId}/collaborators`, "POST", body)
+}
+
+export async function getCollaborators(tripId) {
+  return sendRequest(baseURL+ `/${tripId}/collaborators`, "GET")
+}
+
+export async function deleteCollaborator(email, tripId) {
+  return sendRequest(baseURL+ `/${tripId}/collaborators?email=${email}`, "DELETE")
+}
