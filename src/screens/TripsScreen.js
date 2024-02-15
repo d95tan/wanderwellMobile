@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useUser } from "../hooks/useUser";
 import { useEffect, useState } from "react";
-import { Text, View, Button, StyleSheet } from "react-native";
+import { Text, View, Button, StyleSheet, Alert } from "react-native";
 import { isPast } from "date-fns";
 import { logOut } from "../utilities/users/usersService";
 import { getTrips } from "../utilities/trips/tripsService";
