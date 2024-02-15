@@ -79,40 +79,40 @@ export default function EditEventModal({
 
   const handleStartDateChange = (event, selectedDate) => {
     setIsUnsaved(true);
-    const start = editEvent.start;
+    const start = new Date(editEvent.start);
     start.setFullYear(selectedDate.getFullYear());
     start.setMonth(selectedDate.getMonth());
     start.setDate(selectedDate.getDate());
-    setShowStartDatePicker(false);
     setEditEvent({ ...editEvent, start });
+    setShowStartDatePicker(false);
   };
 
   const handleEndDateChange = (event, selectedDate) => {
     setIsUnsaved(true);
-    const end = editEvent.end;
+    const end = new Date(editEvent.end);
     end.setFullYear(selectedDate.getFullYear());
     end.setMonth(selectedDate.getMonth());
     end.setDate(selectedDate.getDate());
-    setShowEndDatePicker(false);
     setEditEvent({ ...editEvent, end });
+    setShowEndDatePicker(false);
   };
 
   const handleStartTimeChange = (event, selectedTime) => {
     setIsUnsaved(true);
-    const start = editEvent.start;
+    const start = new Date(editEvent.start);
     start.setHours(selectedTime.getHours());
     start.setMinutes(selectedTime.getMinutes());
-    setShowStartTimePicker(false);
     setEditEvent({ ...editEvent, start });
+    setShowStartTimePicker(false);
   };
 
   const handleEndTimeChange = (event, selectedTime) => {
     setIsUnsaved(true);
-    const end = editEvent.end;
+    const end = new Date(editEvent.end);
     end.setHours(selectedTime.getHours());
     end.setMinutes(selectedTime.getMinutes());
-    setShowEndTimePicker(false);
     setEditEvent({ ...editEvent, end });
+    setShowEndTimePicker(false);
   };
 
   return (

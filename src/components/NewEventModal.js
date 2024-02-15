@@ -77,7 +77,7 @@ export default function NewEventModal({
 
   const handleStartDateChange = (event, selectedDate) => {
     setIsUnsaved(true);
-    const start = newEvent.start;
+    const start = new Date(newEvent.start);
     start.setFullYear(selectedDate.getFullYear());
     start.setMonth(selectedDate.getMonth());
     start.setDate(selectedDate.getDate());
@@ -87,7 +87,7 @@ export default function NewEventModal({
 
   const handleEndDateChange = (event, selectedDate) => {
     setIsUnsaved(true);
-    const end = newEvent.end;
+    const end = new Date(newEvent.end);
     end.setFullYear(selectedDate.getFullYear());
     end.setMonth(selectedDate.getMonth());
     end.setDate(selectedDate.getDate());
@@ -97,7 +97,7 @@ export default function NewEventModal({
 
   const handleStartTimeChange = (event, selectedTime) => {
     setIsUnsaved(true);
-    const start = newEvent.start;
+    const start = new Date(newEvent.start);
     start.setHours(selectedTime.getHours());
     start.setMinutes(selectedTime.getMinutes());
     setShowStartTimePicker(false);
@@ -106,7 +106,7 @@ export default function NewEventModal({
 
   const handleEndTimeChange = (event, selectedTime) => {
     setIsUnsaved(true);
-    const end = newEvent.end;
+    const end = new Date(newEvent.end);
     end.setHours(selectedTime.getHours());
     end.setMinutes(selectedTime.getMinutes());
     setShowEndTimePicker(false);
