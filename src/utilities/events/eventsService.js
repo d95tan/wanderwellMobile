@@ -3,6 +3,8 @@ import * as eventsAPI from "./eventsAPI";
 import { eachDayOfInterval } from "date-fns";
 import { SLOT_HEIGHT } from "../../styles/PlanningStyles";
 import { cloneDeep } from "lodash";
+import { getWeather } from "../weather/openMeteo/openMeteoService";
+import { getLatLong } from "../weather/geocodify/geocodifyService";
 
 export async function createEvent(data, tripId, calendar) {
   const newEvent = await eventsAPI.createEvent(data, tripId);
@@ -20,13 +22,18 @@ export async function updateEvent(event, tripId, calendar) {
   const updatedEvent = await eventsAPI.updateEvent(event, tripId);
   const newCalendar = cloneDeep(calendar);
   for (const day of newCalendar) {
+    
+    console.log(isSameDay(day.date, updatedEvent.start))
     for (let i = 0; i < day.events.length; i++) {
       if (day.events[i].id === updatedEvent.id) {
-        day.events[i] = updatedEvent;
-        return newCalendar;
+        day.events.splice(i, 1)
       }
     }
+    if (isSameDay(day.date, new Date(updatedEvent.start))) {
+      day.events.push(updatedEvent)
+    }
   }
+  return newCalendar;
 }
 
 export async function deleteEvent(eventId, tripId, calendar) {
@@ -44,12 +51,17 @@ export async function getEvents(tripId) {
   return events;
 }
 
-export function mapEventsToDay(tripData, allEvents) {
+export async function mapEventsToDay(tripData, allEvents) {
   const datesArr = eachDayOfInterval({
     start: tripData.startdate,
     end: tripData.enddate,
   });
-  //TODO: Weather implementation
+  const coords = await getLatLong(tripData.name);
+  const weatherData = await getWeather(
+    coords,
+    tripData.startdate,
+    tripData.enddate
+  );
   return datesArr.map((date) => {
     const events = allEvents
       .filter((event) => isSameDay(event.start, date))
@@ -62,9 +74,14 @@ export function mapEventsToDay(tripData, allEvents) {
           return -1;
         }
       });
+
+    const [weather] = weatherData
+      ? weatherData.filter((dayWeather) => isSameDay(dayWeather.date, date))
+      : [null];
     return {
       date,
       events,
+      weather,
     };
   });
 }
@@ -76,8 +93,8 @@ export function calculatePosition(event) {
   const [hour, min] = timeStart.split(":");
   const top =
     (2 + parseInt(hour)) * SLOT_HEIGHT + (parseInt(min) * SLOT_HEIGHT) / 60;
-  // console.log(top);
   return { top, height };
+  // return {top: 50, height: 50}
 }
 
 export function yCoordToTime(y, date) {
