@@ -2,11 +2,7 @@
 
 WanderWell Mobile is a companion mobile application built using React Native, to help users manage their trips with ease. Users can create new trips, plan their travel itineraries and even share their trips with friends for a collaborative experience!
 
-<img src="./assets/Landing Screen.png" alt="landing screen" width = 400px /> 
-<img src="./assets/Trips Screen.png" alt="trips screen" width = 400px /> 
-<img src="./assets/Calendar Screen.png" alt="calendar screen" width = 400px /> 
-<img src="./assets/Edit Event Screen.png" alt="edit event screen" width = 400px /> 
-<img src="./assets/Trip Info Screen.png" alt="trip info screen" width = 400px /> 
+<img src="./assets/Landing Screen.png" alt="landing screen" width = 300px /> <img src="./assets/Trips Screen.png" alt="trips screen" width = 300px /> <img src="./assets/Calendar Screen.png" alt="calendar screen" width = 300px /> <img src="./assets/Edit Event Screen.png" alt="edit event screen" width = 300px /> <img src="./assets/Trip Info Screen.png" alt="trip info screen" width = 300px /> 
 
 ## Features
 - **User Authentication**: Sign up and log in securely to access the app
