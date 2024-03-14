@@ -15,6 +15,7 @@ WanderWell Mobile is a companion mobile application built using React Native, to
 - React Native
 - React Navigation
 - API Integrations: OpenMeteo, Geocodify
+- [Backend: ExpressJS & PostgreSQL](https://github.com/d95tan/wanderwellExpress)
 
 ## Usage
 - **Sign Up / Sign In**: Create a new account to use the app
